@@ -28,7 +28,9 @@ CONFIG_APPS = [
 ]
 
 PROJECT_APPS = [
-
+    'apps.users',
+    'apps.students',
+    'apps.groups',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CONFIG_APPS + PROJECT_APPS
@@ -108,3 +110,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTH_USER_MODEL = 'users.User'
