@@ -31,6 +31,7 @@ PROJECT_APPS = [
     'apps.users',
     'apps.students',
     'apps.groups',
+    'apps.schedules',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CONFIG_APPS + PROJECT_APPS

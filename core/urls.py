@@ -9,6 +9,7 @@ from core.admin import admin
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.api_urls')),
+    path('api-login/', include('rest_framework.urls'))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
