@@ -1,19 +1,27 @@
 from apps.students import serializers
 
-from rest_framework import viewsets, response, decorators, mixins
+from rest_framework import viewsets, response, decorators, mixins, permissions
 
 from apps.students.models import Student
 from apps.groups.models import Group
 from apps.schedules.serializers import LessonSerializerForStudent
 
+from utils.permissions import IsManager, IsStudent
+
 
 class StudentAPIViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = serializers.StudentSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsStudent()]
+        return [IsManager()]
 
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action in ['create']:
             return serializers.StudentCreateSerializer
         return self.serializer_class
 
