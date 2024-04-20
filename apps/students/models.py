@@ -3,9 +3,16 @@ from django.db import models
 from apps.users.models import User
 
 from apps.groups.models import Group
+from apps.directions.models import Direction
 
 
 class Student(User):
+    direction = models.ForeignKey(
+        Direction, on_delete=models.SET_NULL,
+        related_name="students",
+        verbose_name="Направление",
+        null=True,
+    )
     group = models.ForeignKey(
         Group, 
         on_delete=models.SET_NULL,

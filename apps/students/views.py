@@ -21,7 +21,7 @@ class StudentAPIViewSet(viewsets.ModelViewSet):
 
 
     def get_serializer_class(self):
-        if self.action in ['create']:
+        if self.action in ['create', 'update']:
             return serializers.StudentCreateSerializer
         return self.serializer_class
 

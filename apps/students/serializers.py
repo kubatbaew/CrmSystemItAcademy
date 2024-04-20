@@ -7,11 +7,14 @@ from apps.mentors.models import Mentor
 
 class StudentSerializer(serializers.ModelSerializer):
     """ Студент Сериализатор """
+    direction = serializers.CharField()
+
     class Meta:
         model = Student
         fields = [
             'id',
             'group',
+            'direction',
             'username',
             'email',
             'full_name',
@@ -22,7 +25,8 @@ class StudentSerializer(serializers.ModelSerializer):
 class StudentCreateSerializer(serializers.ModelSerializer):
     """ Создание Студента Сериализатор """
     password = serializers.CharField(
-        write_only=True
+        write_only=True,
+        required=False
     )
     class Meta:
         model = Student
@@ -30,6 +34,7 @@ class StudentCreateSerializer(serializers.ModelSerializer):
             'username',
             'full_name',
             'group',
+            'direction',
             'phone_number',
             'email',
             'password',
@@ -56,11 +61,14 @@ class StudentCreateSerializer(serializers.ModelSerializer):
 
 
 class MentorSerializer(serializers.ModelSerializer):
+    direction = serializers.CharField()
+    
     class Meta:
         model = Mentor
         fields = [
             'id',
             'full_name',
+            'direction',
             'age',
             'experience',
         ]
@@ -70,12 +78,14 @@ class GroupSerializer(serializers.ModelSerializer):
     """ Группа Сериализатор """
     students = StudentSerializer(many=True, read_only=True)
     mentor = MentorSerializer(read_only=True)
+    direction = serializers.CharField()
 
     class Meta:
         model = Group
         fields = [
             'id',
             'title',
+            'direction',
             'created_at',
             'mentor',
             'students',

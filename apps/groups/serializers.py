@@ -7,11 +7,14 @@ from apps.students.serializers import StudentSerializer, MentorSerializer
 class GroupSerializer(serializers.ModelSerializer):
     students = StudentSerializer(read_only=True, many=True)
     mentor = MentorSerializer()
+    direction = serializers.CharField()
+
     class Meta:
         model = Group
         fields = [
             'id',
             'title',
+            'direction',
             'created_at',
             'mentor',
             'students',
@@ -19,10 +22,12 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class GroupListSerializer(serializers.ModelSerializer):
+    direction = serializers.CharField()
     class Meta:
         model = Group
         fields = [
             'id',
+            'direction',
             'title',
         ]
 
@@ -32,5 +37,6 @@ class GroupCreateSerializer(serializers.ModelSerializer):
         model = Group
         fields = [
             'title',
+            'direction',
             'mentor',
         ]
