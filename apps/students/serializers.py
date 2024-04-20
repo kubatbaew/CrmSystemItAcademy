@@ -1,7 +1,8 @@
-from rest_framework import serializers
+from rest_framework import serializers, validators
 
 from apps.students.models import Student
 from apps.groups.models import Group
+from apps.mentors.models import Mentor
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -45,11 +46,30 @@ class StudentCreateSerializer(serializers.ModelSerializer):
         student.save()
 
         return student
+    
+    def validate_phone_number(self, value):
+        if '+996' not in value:
+            raise validators.ValidationError("[!]Ошибка: Номер телефона неправильный!")
+        if len(value) != 13:
+            raise validators.ValidationError("[!]Ошибка: Длина не совпадает")
+        return value
+
+
+class MentorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mentor
+        fields = [
+            'id',
+            'full_name',
+            'age',
+            'experience',
+        ]
 
 
 class GroupSerializer(serializers.ModelSerializer):
     """ Группа Сериализатор """
     students = StudentSerializer(many=True, read_only=True)
+    mentor = MentorSerializer(read_only=True)
 
     class Meta:
         model = Group
@@ -57,5 +77,6 @@ class GroupSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'created_at',
+            'mentor',
             'students',
         ]
