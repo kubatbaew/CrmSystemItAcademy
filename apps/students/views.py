@@ -6,6 +6,9 @@ from apps.students.models import Student
 from apps.groups.models import Group
 from apps.schedules.serializers import LessonSerializerForStudent
 
+from apps.payments.serializers import PaymentCreateSerializer, PaymentSerializer
+from apps.payments.models import Payment
+
 from utils.permissions import IsManager, IsStudent
 
 
@@ -21,9 +24,25 @@ class StudentAPIViewSet(viewsets.ModelViewSet):
 
 
     def get_serializer_class(self):
-        if self.action in ['create', 'update']:
+        if self.action == 'change_password':
+            return serializers.StudentChangePasswordSerializer
+        if self.action in ['create']:
             return serializers.StudentCreateSerializer
+        if self.action == 'add_payment':
+            return PaymentCreateSerializer
         return self.serializer_class
+
+
+    @decorators.action(detail=True, methods=['PATCH', 'PUT'], url_path="change_password")
+    def change_password(self, request, pk=None):
+        student = self.get_object()
+        
+        serializer = self.get_serializer(student, data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+
+        return response.Response({"message": "Пароль успешно изменен!"})
 
 
     @decorators.action(detail=True, methods=['GET'], url_path="group")
@@ -50,6 +69,29 @@ class StudentAPIViewSet(viewsets.ModelViewSet):
 
         return response.Response(data=serializer.data, status=200)
 
+
+    @decorators.action(detail=True, methods=['POST'], url_path="add_payment")
+    def add_payment(self, request, pk=None):
+        student = self.get_object()
+
+        payment = Payment.objects.create(
+            file=request.data.get('file'),
+            date_of_payment=request.data.get('date_of_payment'),
+            student=student,
+        )
+        print(request.data)
+
+        return response.Response({"message": "Оплата успешно произведена"})
+
+
+    @decorators.action(detail=True, methods=['GET'], url_path='all_payments')
+    def all_payments(self, request, pk=None):
+        student = self.get_object()
+
+        serializer = PaymentSerializer(student.payments, many=True)
+
+        return response.Response(serializer.data, status=200)
+    
 
 class StudentProfileAPIViewSet(
     mixins.ListModelMixin,

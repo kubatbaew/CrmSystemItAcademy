@@ -31,7 +31,7 @@ class MentorRetrieveSerializer(serializers.ModelSerializer):
 
 
 class MentorCreateSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = Mentor
@@ -52,6 +52,18 @@ class MentorCreateSerializer(serializers.ModelSerializer):
             raise ValueError("Ошибка. Нет пароля")
         
         mentor = Mentor(**validated_data)
+        mentor.set_password(password)
+        mentor.save()
+
+        return mentor
+    
+    def update(self, instance, validated_data):
+        mentor = instance
+        password = validated_data.get('password')
+
+        if not password:
+            raise serializers.ValidationError("Пароль отсутстует")
+        
         mentor.set_password(password)
         mentor.save()
 

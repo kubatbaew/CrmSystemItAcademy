@@ -5,16 +5,16 @@ from apps.mentors.models import Mentor
 
 from apps.groups.serializers import GroupSerializer
 
-from utils.permissions import IsManager
+from utils.permissions import IsManager, IsMentor
 
 
 class MentorAPIViewSet(viewsets.ModelViewSet):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
-    permission_classes = [IsManager]
+    permission_classes = [IsMentor]
 
     def get_serializer_class(self):
-        if self.action == 'create':
+        if self.action in ['create', 'update', 'patrial_update']:
             return MentorCreateSerializer
         if self.action == 'retrieve':
             return MentorRetrieveSerializer

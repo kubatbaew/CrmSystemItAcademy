@@ -24,6 +24,6 @@ class IsMentor(BasePermission):
         return bool(obj.mentor.username == request.user.username)
 
     def has_permission(self, request, view):
-        if request.method in ['POST', 'DELETE']:
-            return request.user.is_staff
+        if request.method in ['POST', 'DELETE', 'PUT', 'PATCH']:
+            return request.user.is_superuser
         return True
