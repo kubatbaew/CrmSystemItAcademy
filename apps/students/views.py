@@ -1,6 +1,7 @@
 from apps.students import serializers
 
-from rest_framework import viewsets, response, decorators, mixins, permissions
+from rest_framework import viewsets, response, decorators, mixins, permissions, filters
+from django_filters import rest_framework
 
 from apps.students.models import Student
 from apps.groups.models import Group
@@ -10,12 +11,17 @@ from apps.payments.serializers import PaymentCreateSerializer, PaymentSerializer
 from apps.payments.models import Payment
 
 from utils.permissions import IsManager, IsStudent
+from utils.paginations import StudentPagination
 
 
 class StudentAPIViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = serializers.StudentSerializer
     permission_classes = [permissions.IsAdminUser]
+    filter_backends = [rest_framework.DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['direction', 'group']
+    search_fields = ['full_name', 'username']
+    pagination_class = StudentPagination
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:

@@ -25,6 +25,7 @@ DJANGO_APPS = [
 
 CONFIG_APPS = [
     'rest_framework',
+    'django_filters',
 ]
 
 PROJECT_APPS = [
@@ -39,6 +40,13 @@ PROJECT_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + CONFIG_APPS + PROJECT_APPS
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

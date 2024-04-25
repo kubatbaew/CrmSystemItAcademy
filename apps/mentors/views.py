@@ -1,3 +1,6 @@
+from django_filters import rest_framework
+from rest_framework import filters
+
 from rest_framework import viewsets, decorators, response
 
 from apps.mentors.serializers import MentorSerializer, MentorCreateSerializer, MentorRetrieveSerializer
@@ -12,6 +15,9 @@ class MentorAPIViewSet(viewsets.ModelViewSet):
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
     permission_classes = [IsMentor]
+    filter_backends = [rest_framework.DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['direction']
+    search_fields = ['full_name', 'username']
 
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'patrial_update']:

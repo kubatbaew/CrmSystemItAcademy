@@ -1,3 +1,5 @@
+from rest_framework import filters
+
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import response
 
@@ -13,6 +15,8 @@ class DirectionAPIViewSet(ModelViewSet):
     queryset = Direction.objects.all()
     serializer_class = DirectionSerializer
     permission_classes = [IsManager]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
 
     def get_queryset(self):
         try:
