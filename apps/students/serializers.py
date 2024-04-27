@@ -107,7 +107,7 @@ class StudentChangePasswordSerializer(serializers.ModelSerializer):
         return student
     
 
-class MentorSerializer(serializers.ModelSerializer):
+class MentorForStudentSerializer(serializers.ModelSerializer):
     direction = serializers.CharField()
     
     class Meta:
@@ -121,11 +121,11 @@ class MentorSerializer(serializers.ModelSerializer):
         ]
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupForStudentSerializer(serializers.ModelSerializer):
 
     """ Группа Сериализатор """
     students = StudentSerializer(many=True, read_only=True)
-    mentor = MentorSerializer(read_only=True)
+    mentor = MentorForStudentSerializer(read_only=True)
     direction = serializers.CharField()
 
     class Meta:

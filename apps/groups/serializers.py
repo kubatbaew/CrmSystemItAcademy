@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
 from apps.groups.models import Group
-from apps.students.serializers import StudentSerializer, MentorSerializer
+from apps.students.serializers import StudentSerializer, MentorForStudentSerializer
 
 
 class GroupSerializer(serializers.ModelSerializer):
     students = StudentSerializer(read_only=True, many=True)
-    mentor = MentorSerializer()
+    mentor = MentorForStudentSerializer()
     direction = serializers.CharField()
 
     class Meta:
